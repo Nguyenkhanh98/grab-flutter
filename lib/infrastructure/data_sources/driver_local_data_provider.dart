@@ -1,4 +1,4 @@
-import 'package:flutter_application_1/catalog/infrastructure/models/driver.model.dart';
+import 'package:flutter_application_1/infrastructure/models/driver.model.dart';
 
 class ProductLocalDataProvider {
   Future<List<DriverModel>> fetchProduct() {

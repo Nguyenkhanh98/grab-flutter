@@ -1,4 +1,4 @@
-import 'package:flutter_application_1/catalog/domain/entities/driver.dart';
+import 'package:flutter_application_1/domain/entities/driver.dart';
 import 'package:meta/meta.dart';
 
 class DriverModel extends Driver {
