@@ -1,7 +1,11 @@
 import 'dart:io';
 
+import 'package:fl_query/fl_query.dart';
+import 'package:fl_query_connectivity_plus_adapter/fl_query_connectivity_plus_adapter.dart';
+import 'package:fl_query_devtools/fl_query_devtools.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_application_1/application/user.service.dart';
 import 'package:flutter_application_1/common/constant/constants.dart';
 import 'package:flutter_application_1/common/constant/languageCode.dart';
 import 'package:flutter_application_1/common/helpers/config.dart';
@@ -9,11 +13,14 @@ import 'package:flutter_application_1/common/helpers/logging.dart';
 import 'package:flutter_application_1/common/helpers/router_handler.dart';
 import 'package:flutter_application_1/common/routes/routes.dart';
 import 'package:flutter_application_1/common/theme/app_theme.dart';
-import 'package:flutter_application_1/presentation/screens/signin/Home/home_screen.dart';
+import 'package:flutter_application_1/injection.dart';
+import 'package:flutter_application_1/presentation/Screens/Home/HomeScreen.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_application_1/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:logging/logging.dart';
 import 'package:path_provider/path_provider.dart';
@@ -21,6 +28,7 @@ import 'package:sizer/sizer.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await DotEnv().load(fileName: '.env');
   Paint.enableDithering = true;
 
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
@@ -42,6 +50,12 @@ Future<void> main() async {
   }
   await startService();
 
+  configureDependencies();
+
+  await QueryClient.initialize(
+    connectivity: FlQueryConnectivityPlusAdapter(),
+    cachePrefix: 'global-query',
+  );
   runApp(const MyApp());
 }
 
@@ -103,9 +117,11 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  final GoRouter _router = GoRouter(routes: goRoutes);
   @override
   Widget build(BuildContext context) {
-    return AnnotatedRegion<SystemUiOverlayStyle>(
+    return QueryClientProvider(
+        child: AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.dark,
@@ -115,9 +131,8 @@ class _MyAppState extends State<MyApp> {
       child: LayoutBuilder(builder: (context, constraints) {
         return OrientationBuilder(builder: (context, orientation) {
           SizerUtil.setScreenSize(constraints, orientation);
-          return MaterialApp(
+          return MaterialApp.router(
             title: 'Grab',
-            restorationScopeId: 'grab',
             themeMode: AppTheme.themeMode,
             theme: AppTheme.lightTheme(context: context),
             locale: _locale,
@@ -130,21 +145,23 @@ class _MyAppState extends State<MyApp> {
             supportedLocales: LanguageCodes.languageCodes.entries
                 .map((e) => Locale(e.value, ''))
                 .toList(),
-            routes: namedRoutes,
-            navigatorKey: navigatorKey,
-            onGenerateRoute: (RouteSettings settings) {
-              if (settings.name == '/player') {
-                return PageRouteBuilder(
-                  opaque: false,
-                  pageBuilder: (_, __, ___) => const HomeScreen(),
-                );
-              }
-              return HandleRoute.handleRoute(settings.name);
-            },
+            routerConfig: _router,
+            // builder: (context, child) {
+            //   return FlQueryDevtools(child: child!);
+            // },
+            // onGenerateRoute: (RouteSettings settings) {
+            //   if (settings.name == '/player') {
+            //     return PageRouteBuilder(
+            //       opaque: false,
+            //       pageBuilder: (_, __, ___) => const HomeScreen(),
+            //     );
+            //   }
+            //   return HandleRoute.handleRoute(settings.name);
+            // },
           );
         });
       }),
-    );
+    ));
   }
 }
 
