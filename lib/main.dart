@@ -28,7 +28,7 @@ import 'package:sizer/sizer.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await DotEnv().load(fileName: '.env');
+  await dotenv.load(fileName: '.env');
   Paint.enableDithering = true;
 
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
@@ -49,8 +49,6 @@ Future<void> main() async {
     setOptimalDisplayMode();
   }
   await startService();
-
-  configureDependencies();
 
   await QueryClient.initialize(
     connectivity: FlQueryConnectivityPlusAdapter(),
@@ -121,47 +119,48 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return QueryClientProvider(
+        maxRetries: 0,
         child: AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.dark,
-        systemNavigationBarColor: Colors.transparent,
-        systemNavigationBarIconBrightness: Brightness.dark,
-      ),
-      child: LayoutBuilder(builder: (context, constraints) {
-        return OrientationBuilder(builder: (context, orientation) {
-          SizerUtil.setScreenSize(constraints, orientation);
-          return MaterialApp.router(
-            title: 'Grab',
-            themeMode: AppTheme.themeMode,
-            theme: AppTheme.lightTheme(context: context),
-            locale: _locale,
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: LanguageCodes.languageCodes.entries
-                .map((e) => Locale(e.value, ''))
-                .toList(),
-            routerConfig: _router,
-            // builder: (context, child) {
-            //   return FlQueryDevtools(child: child!);
-            // },
-            // onGenerateRoute: (RouteSettings settings) {
-            //   if (settings.name == '/player') {
-            //     return PageRouteBuilder(
-            //       opaque: false,
-            //       pageBuilder: (_, __, ___) => const HomeScreen(),
-            //     );
-            //   }
-            //   return HandleRoute.handleRoute(settings.name);
-            // },
-          );
-        });
-      }),
-    ));
+          value: SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent,
+            statusBarIconBrightness: Brightness.dark,
+            systemNavigationBarColor: Colors.transparent,
+            systemNavigationBarIconBrightness: Brightness.dark,
+          ),
+          child: LayoutBuilder(builder: (context, constraints) {
+            return OrientationBuilder(builder: (context, orientation) {
+              SizerUtil.setScreenSize(constraints, orientation);
+              return MaterialApp.router(
+                title: 'Grab',
+                themeMode: AppTheme.themeMode,
+                theme: AppTheme.lightTheme(context: context),
+                locale: _locale,
+                localizationsDelegates: const [
+                  AppLocalizations.delegate,
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                ],
+                supportedLocales: LanguageCodes.languageCodes.entries
+                    .map((e) => Locale(e.value, ''))
+                    .toList(),
+                routerConfig: _router,
+                // builder: (context, child) {
+                //   return FlQueryDevtools(child: child!);
+                // },
+                // onGenerateRoute: (RouteSettings settings) {
+                //   if (settings.name == '/player') {
+                //     return PageRouteBuilder(
+                //       opaque: false,
+                //       pageBuilder: (_, __, ___) => const HomeScreen(),
+                //     );
+                //   }
+                //   return HandleRoute.handleRoute(settings.name);
+                // },
+              );
+            });
+          }),
+        ));
   }
 }
 
@@ -189,5 +188,6 @@ Future<void> openHiveBox(String boxName, {bool limit = false}) async {
 
 Future<void> startService() async {
   await initializeLogging();
+  await configureDependencies();
   GetIt.I.registerSingleton<MyTheme>(MyTheme());
 }

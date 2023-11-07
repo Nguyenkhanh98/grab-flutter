@@ -7,7 +7,7 @@ import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter_application_1/domain/interfaces/driver.interface.dart';
 
-@Injectable()
+@injectable
 class DriverRepository implements DriverInterface {
   final Connectivity connectivity;
   final DriverRemoteDataProvider driverRemoteDataProvider;

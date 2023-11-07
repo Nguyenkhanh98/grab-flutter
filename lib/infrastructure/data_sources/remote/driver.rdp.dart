@@ -3,7 +3,7 @@ import 'package:flutter_application_1/domain/entities/driver.entity.dart';
 import 'package:flutter_application_1/domain/entities/user.entity.dart';
 import 'package:injectable/injectable.dart';
 
-@Injectable()
+@injectable
 class DriverRemoteDataProvider {
   final DriverApi driverApi;
   DriverRemoteDataProvider(this.driverApi);

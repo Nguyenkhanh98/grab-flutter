@@ -1,13 +1,17 @@
 import 'package:flutter_application_1/APIs/instance.api.dart';
 import 'package:flutter_application_1/domain/entities/driver.entity.dart';
 import 'package:flutter_application_1/domain/entities/user.entity.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class DriverApi {
   final GrabAPIInstance instance;
   const DriverApi(this.instance);
 
-  Future<Driver?> login(LoginInput loginInput) async {
-    final response = await instance.post('/driver/login',
+  Future<Driver> login(LoginInput loginInput) async {
+    print('===');
+    print(loginInput.toJson());
+    final response = await instance.post('driver/login',
         body: loginInput.toJson(), isAuth: false);
 
     final Driver user = response.body as Driver;

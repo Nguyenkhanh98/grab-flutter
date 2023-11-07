@@ -1,6 +1,6 @@
 import 'package:injectable/injectable.dart';
 
-@Injectable()
+@injectable
 class Connectivity {
   get isConnected {
     return true;

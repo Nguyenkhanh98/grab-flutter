@@ -3,7 +3,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart';
 import 'package:injectable/injectable.dart';
 
-@Injectable()
+@injectable
 class GrabAPIInstance {
   String baseUrl = dotenv.env['API_URL'] ?? 'https://api.grab.com';
 
@@ -32,8 +32,16 @@ class GrabAPIInstance {
       headers ??= {};
       headers['Authorization'] = 'Bearer $accessToken';
     }
-    final response = await post(url as String, headers: headers, body: body);
-    return response;
+    try {
+      print('============');
+      final response = await post(url.toString(), headers: headers, body: body);
+      return response;
+    } catch (e) {
+      print(e);
+      print('------------');
+
+      rethrow;
+    }
   }
 
   Future<Response> put(String path,

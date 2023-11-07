@@ -53,7 +53,7 @@ class AppTheme {
       progressIndicatorTheme: const ProgressIndicatorThemeData()
           .copyWith(color: currentTheme.currentColor()),
       iconTheme: IconThemeData(
-        color: Colors.grey[800],
+        color: Colors.indigoAccent,
         opacity: 1.0,
         size: 24.0,
       ),

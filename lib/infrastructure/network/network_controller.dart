@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:connectivity/connectivity.dart';
+import 'package:flutter_application_1/common/platform/connectivity.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 

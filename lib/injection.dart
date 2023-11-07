@@ -4,6 +4,6 @@ import 'injection.config.dart';
 
 final getIt = GetIt.instance;
 
-@InjectableInit(generateForDir: ['di'])
+@InjectableInit()
 Future<void> configureDependencies() async =>
     await GetItInjectableX(getIt).init();

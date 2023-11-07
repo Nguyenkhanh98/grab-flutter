@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/presentation/Screens/Auth/SignInScreen.dart';
 import 'package:flutter_application_1/presentation/Screens/Home/HomeScreen.dart';
-import 'package:flutter_application_1/presentation/Screens/auth.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive/hive.dart';
 
 Widget initalFunction() {
   return Hive.box("settings").get("userId") != null
       ? const HomeScreen()
-      : const AuthScreen();
+      : SignInScreen();
 }
 
 // final Map<String, Widget Function(BuildContext context)> namedRoutes = {
@@ -23,7 +23,7 @@ final List<GoRoute> goRoutes = [
   ),
   GoRoute(
     path: "/login",
-    builder: (BuildContext context, state) => const AuthScreen(),
+    builder: (BuildContext context, state) => SignInScreen(),
   ),
   GoRoute(
     path: "/booking",
