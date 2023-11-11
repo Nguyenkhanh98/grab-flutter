@@ -1,8 +1,5 @@
 import 'dart:io';
 
-import 'package:fl_query/fl_query.dart';
-import 'package:fl_query_connectivity_plus_adapter/fl_query_connectivity_plus_adapter.dart';
-import 'package:fl_query_devtools/fl_query_devtools.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_application_1/application/user.service.dart';
@@ -17,6 +14,7 @@ import 'package:flutter_application_1/injection.dart';
 import 'package:flutter_application_1/presentation/Screens/Home/HomeScreen.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_application_1/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
@@ -50,11 +48,7 @@ Future<void> main() async {
   }
   await startService();
 
-  await QueryClient.initialize(
-    connectivity: FlQueryConnectivityPlusAdapter(),
-    cachePrefix: 'global-query',
-  );
-  runApp(const MyApp());
+  runApp(const MainApp());
 }
 
 Future<void> setOptimalDisplayMode() async {
@@ -88,79 +82,130 @@ class MyApp extends StatefulWidget {
   }
 }
 
+class MainApp extends HookWidget {
+  const MainApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    Locale _locale = const Locale('en', '');
+
+    final GoRouter _router = GoRouter(routes: goRoutes);
+
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+        systemNavigationBarColor: Colors.transparent,
+        systemNavigationBarIconBrightness: Brightness.dark,
+      ),
+      child: LayoutBuilder(builder: (context, constraints) {
+        return OrientationBuilder(builder: (context, orientation) {
+          SizerUtil.setScreenSize(constraints, orientation);
+          return MaterialApp.router(
+            title: 'Grab',
+            themeMode: AppTheme.themeMode,
+            theme: AppTheme.lightTheme(context: context),
+            locale: _locale,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: LanguageCodes.languageCodes.entries
+                .map((e) => Locale(e.value, ''))
+                .toList(),
+            routerConfig: _router,
+            // builder: (context, child) {
+            //   return FlQueryDevtools(child: child!);
+            // },
+            // onGenerateRoute: (RouteSettings settings) {
+            //   if (settings.name == '/player') {
+            //     return PageRouteBuilder(
+            //       opaque: false,
+            //       pageBuilder: (_, __, ___) => const HomeScreen(),
+            //     );
+            //   }
+            //   return HandleRoute.handleRoute(settings.name);
+            // },
+          );
+        });
+      }),
+    );
+  }
+}
+
 class _MyAppState extends State<MyApp> {
   Locale _locale = const Locale('en', '');
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-  @override
-  void initState() {
-    super.initState();
-    var context = Hive.box('settings');
-    var lang = context.get('lang');
-    var systemLanguageCode = Platform.localeName.substring(0, 2);
-    if (lang == null && LanguageCodes.languageCodes.containsKey(lang)) {
-      _locale = Locale(systemLanguageCode);
-    } else {
-      _locale = Locale(LanguageCodes.languageCodes[lang ?? 'English'] ?? 'en');
-    }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   var context = Hive.box('settings');
+  //   var lang = context.get('lang');
+  //   var systemLanguageCode = Platform.localeName.substring(0, 2);
+  //   if (lang == null && LanguageCodes.languageCodes.containsKey(lang)) {
+  //     _locale = Locale(systemLanguageCode);
+  //   } else {
+  //     _locale = Locale(LanguageCodes.languageCodes[lang ?? 'English'] ?? 'en');
+  //   }
 
-    AppTheme.currentTheme.addListener(() {
-      setState(() {});
-    });
-  }
+  //   AppTheme.currentTheme.addListener(() {
+  //     setState(() {});
+  //   });
+  // }
 
-  void setLocale(Locale value) {
-    setState(() {
-      _locale = value;
-    });
-  }
+  // void setLocale(Locale value) {
+  //   setState(() {
+  //     _locale = value;
+  //   });
+  // }
 
   final GoRouter _router = GoRouter(routes: goRoutes);
   @override
   Widget build(BuildContext context) {
-    return QueryClientProvider(
-        maxRetries: 0,
-        child: AnnotatedRegion<SystemUiOverlayStyle>(
-          value: SystemUiOverlayStyle(
-            statusBarColor: Colors.transparent,
-            statusBarIconBrightness: Brightness.dark,
-            systemNavigationBarColor: Colors.transparent,
-            systemNavigationBarIconBrightness: Brightness.dark,
-          ),
-          child: LayoutBuilder(builder: (context, constraints) {
-            return OrientationBuilder(builder: (context, orientation) {
-              SizerUtil.setScreenSize(constraints, orientation);
-              return MaterialApp.router(
-                title: 'Grab',
-                themeMode: AppTheme.themeMode,
-                theme: AppTheme.lightTheme(context: context),
-                locale: _locale,
-                localizationsDelegates: const [
-                  AppLocalizations.delegate,
-                  GlobalMaterialLocalizations.delegate,
-                  GlobalWidgetsLocalizations.delegate,
-                  GlobalCupertinoLocalizations.delegate,
-                ],
-                supportedLocales: LanguageCodes.languageCodes.entries
-                    .map((e) => Locale(e.value, ''))
-                    .toList(),
-                routerConfig: _router,
-                // builder: (context, child) {
-                //   return FlQueryDevtools(child: child!);
-                // },
-                // onGenerateRoute: (RouteSettings settings) {
-                //   if (settings.name == '/player') {
-                //     return PageRouteBuilder(
-                //       opaque: false,
-                //       pageBuilder: (_, __, ___) => const HomeScreen(),
-                //     );
-                //   }
-                //   return HandleRoute.handleRoute(settings.name);
-                // },
-              );
-            });
-          }),
-        ));
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+        systemNavigationBarColor: Colors.transparent,
+        systemNavigationBarIconBrightness: Brightness.dark,
+      ),
+      child: LayoutBuilder(builder: (context, constraints) {
+        return OrientationBuilder(builder: (context, orientation) {
+          SizerUtil.setScreenSize(constraints, orientation);
+          return MaterialApp.router(
+            title: 'Grab',
+            themeMode: AppTheme.themeMode,
+            theme: AppTheme.lightTheme(context: context),
+            locale: _locale,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: LanguageCodes.languageCodes.entries
+                .map((e) => Locale(e.value, ''))
+                .toList(),
+            routerConfig: _router,
+            // builder: (context, child) {
+            //   return FlQueryDevtools(child: child!);
+            // },
+            // onGenerateRoute: (RouteSettings settings) {
+            //   if (settings.name == '/player') {
+            //     return PageRouteBuilder(
+            //       opaque: false,
+            //       pageBuilder: (_, __, ___) => const HomeScreen(),
+            //     );
+            //   }
+            //   return HandleRoute.handleRoute(settings.name);
+            // },
+          );
+        });
+      }),
+    );
   }
 }
 

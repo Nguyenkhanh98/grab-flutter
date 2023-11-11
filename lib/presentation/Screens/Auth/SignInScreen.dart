@@ -1,9 +1,10 @@
-import 'package:fl_query_hooks/fl_query_hooks.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/APIs/driver.api.dart';
-import 'package:flutter_application_1/common/operation/mutations/user.mutation.dart';
+// import 'package:flutter_application_1/common/operation/mutations/user.mutation.dart';
+import 'package:flutter_application_1/domain/entities/driver.entity.dart';
 import 'package:flutter_application_1/domain/entities/user.entity.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_query/flutter_query.dart';
 import 'package:get_it/get_it.dart';
 
 const countryCodes = [
@@ -26,19 +27,33 @@ class SignInScreen extends HookWidget {
       countryCode.value = newValue!;
     }
 
-    final mutation = useMutationJob(
-      job: loginMutationJob,
-      args: driverApiInstance,
-      onError: (error, recoveryData) => print(error),
-      onData: (data, recoveryData) => print(data),
-    );
+    // final mutation = useMutationJob(
+    //   job: loginMutationJob,
+    //   args: driverApiInstance,
+    //   onError: (error, recoveryData) => print(error),
+    //   onData: (data, recoveryData) => print(data),
+    // );
 
+    final mutation = useMutation((dynamic arg) => driverApiInstance.login(arg));
+    // final mutationTemp = useMutation<Driver, dynamic, LoginInput, dynamic>(
+    //   'sign-up',
+    //   (loginInput) async {
+    //     print("DDDDDDDDDD");
+    //     final data = await driverApiInstance.login(loginInput);
+    //     return data;
+    //   },
+    // );
+
+    // print(mutation);
     void onPressed() {
       final input = LoginInput(
           phone: phone.value, countryCode: countryCode.value.substring(1));
       textFocus.unfocus();
       print(input);
       mutation.mutate(input);
+      // mutationTemp.mutate(input);
+      print('=================');
+      // mutation.mutate(input);
     }
 
     return Scaffold(

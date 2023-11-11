@@ -153,22 +153,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
-  connectivity_plus:
-    dependency: transitive
-    description:
-      name: connectivity_plus
-      sha256: "77a180d6938f78ca7d2382d2240eb626c0f6a735d0bfdce227d8ffb80f95c48b"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.0.2"
-  connectivity_plus_platform_interface:
-    dependency: transitive
-    description:
-      name: connectivity_plus_platform_interface
-      sha256: cf1d1c28f4416f8c654d7dc3cd638ec586076255d407cef3ddbdaf178272a71a
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.2.4"
   convert:
     dependency: transitive
     description:
@@ -209,14 +193,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
-  dbus:
-    dependency: transitive
-    description:
-      name: dbus
-      sha256: "6f07cba3f7b3448d42d015bfd3d53fe12e5b36da2423f23838efc1d5fb31a263"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.7.8"
   equatable:
     dependency: "direct main"
     description:
@@ -257,38 +233,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
-  fl_query:
-    dependency: "direct main"
-    description:
-      name: fl_query
-      sha256: daee5ab0ed8899baa201b89b5813107df5258144a9e2bcf192dbcf922c57d985
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
-  fl_query_connectivity_plus_adapter:
-    dependency: "direct main"
-    description:
-      name: fl_query_connectivity_plus_adapter
-      sha256: "7bb903ca8e9374e26e749032e6ec128dbb48b4a1ceb6ee3117e5f35e80641a38"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.0"
-  fl_query_devtools:
-    dependency: "direct main"
-    description:
-      name: fl_query_devtools
-      sha256: "2ae8905fd4a95f1d245a1b54057c31c8d27fc961223bcb7ce13088bcf6595059"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.0"
-  fl_query_hooks:
-    dependency: "direct main"
-    description:
-      name: fl_query_hooks
-      sha256: "6c88b3bfbdc3e1330931b927903929d7351f86fc63266ac93b3acb9f133a09a9"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -517,14 +461,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.7.1"
-  json_view:
-    dependency: transitive
-    description:
-      name: json_view
-      sha256: "905c69f9e69d1eab5406b87ab6c10c3706c04c70c6a4959621bd2b43c2d27374"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.4.2"
   lints:
     dependency: transitive
     description:
@@ -581,22 +517,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.4.2"
-  mutex:
-    dependency: transitive
-    description:
-      name: mutex
-      sha256: "8827da25de792088eb33e572115a5eb0d61d61a3c01acbc8bcbe76ed78f1a1f2"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.1.0"
-  nm:
-    dependency: transitive
-    description:
-      name: nm
-      sha256: "2c9aae4127bdc8993206464fcc063611e0e36e72018696cd9631023a31b24254"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.5.0"
   package_config:
     dependency: transitive
     description:
@@ -786,14 +706,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.11.0"
-  state_notifier:
-    dependency: transitive
-    description:
-      name: state_notifier
-      sha256: "8fe42610f179b843b12371e40db58c9444f8757f8b69d181c97e50787caed289"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.7.2+1"
   stream_channel:
     dependency: transitive
     description:
